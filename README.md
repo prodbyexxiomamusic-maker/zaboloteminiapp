@@ -1,91 +1,142 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>ZaboloteVPN</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZaboloteVPN</title>
 
-    <!-- Telegram WebApp -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #38bdf8, #22c55e);
+    color: white;
+    text-align: center;
+}
 
-        h1 {
-            margin-bottom: 10px;
-        }
+.screen {
+    display: none;
+    padding: 20px;
+}
 
-        .card {
-            background: #1e293b;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 15px;
-        }
+.active {
+    display: block;
+}
 
-        button {
-            width: 100%;
-            padding: 15px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+.card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    margin: 15px 0;
+}
 
-        .basic { background: #22c55e; }
-        .premium { background: #3b82f6; }
-        .vip { background: #a855f7; }
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
 
-        .btn {
-            background: #334155;
-        }
-    </style>
+button:hover {
+    transform: scale(1.05);
+}
+
+.basic { background: #22c55e; }
+.premium { background: #3b82f6; }
+.vip { background: #a855f7; }
+.back { background: #64748b; }
+.buy { background: #f59e0b; }
+
+h1 {
+    margin-top: 20px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>🌐 ZaboloteVPN</h1>
-<p>Выберите тариф:</p>
+<!-- Главный экран -->
+<div id="home" class="screen active">
+    <h1>🌴 ZaboloteVPN</h1>
+    <p>Выберите тариф</p>
 
-<div class="card">
-    <h3>⚡ Базовый</h3>
-    <p>100₽ / месяц</p>
-    <button class="basic" onclick="buy('Базовый')">Выбрать</button>
+    <div class="card">
+        <button class="basic" onclick="openTariff('Базовый', '100₽ / месяц')">⚡ Базовый</button>
+        <button class="premium" onclick="openTariff('Премиум', '249₽ / 3 месяца')">⭐ Премиум</button>
+        <button class="vip" onclick="openTariff('VIP', '799₽ / 12 месяцев')">💎 VIP</button>
+    </div>
+
+    <div class="card">
+        <button onclick="openRef()">🎁 Реферальная система</button>
+    </div>
 </div>
 
-<div class="card">
-    <h3>⭐ Премиум</h3>
-    <p>249₽ / 3 месяца</p>
-    <button class="premium" onclick="buy('Премиум')">Выбрать</button>
+<!-- Экран тарифа -->
+<div id="tariff" class="screen">
+    <h1 id="tariffName"></h1>
+    <p id="tariffPrice"></p>
+
+    <div class="card">
+        <button class="buy" onclick="buy()">💳 Купить</button>
+        <button class="back" onclick="goHome()">⬅️ Назад</button>
+    </div>
 </div>
 
-<div class="card">
-    <h3>💎 VIP</h3>
-    <p>799₽ / 12 месяцев</p>
-    <button class="vip" onclick="buy('VIP')">Выбрать</button>
-</div>
+<!-- Рефералка -->
+<div id="ref" class="screen">
+    <h1>🎁 Реферальная система</h1>
 
-<div class="card">
-    <h3>🎁 Реферальная система</h3>
-    <p>Получайте 10% с оплат друзей</p>
-    <button class="btn" onclick="ref()">Подробнее</button>
+    <div class="card">
+        <p>Получайте 10% с каждого друга</p>
+        <p>Выплаты 1 числа каждого месяца</p>
+    </div>
+
+    <button class="back" onclick="goHome()">⬅️ Назад</button>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-function buy(plan) {
-    tg.sendData(plan);
+let selectedPlan = "";
+
+// открыть тариф
+function openTariff(name, price) {
+    selectedPlan = name;
+    document.getElementById("tariffName").innerText = name;
+    document.getElementById("tariffPrice").innerText = price;
+
+    showScreen("tariff");
 }
 
-function ref() {
-    alert("Приглашайте друзей и получайте 10%!\nВыплаты 1 числа каждого месяца.");
+// открыть рефералку
+function openRef() {
+    showScreen("ref");
+}
+
+// назад
+function goHome() {
+    showScreen("home");
+}
+
+// переключение экранов
+function showScreen(id) {
+    document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+// покупка → отправка в бот
+function buy() {
+    tg.sendData(selectedPlan);
 }
 </script>
 
