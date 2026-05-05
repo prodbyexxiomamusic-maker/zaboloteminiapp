@@ -13,6 +13,7 @@ body {
     background: linear-gradient(135deg, #38bdf8, #22c55e);
     color: white;
     text-align: center;
+    padding-top: 10px;
 }
 
 .screen {
@@ -24,9 +25,13 @@ body {
     display: block;
 }
 
+h1 {
+    margin-top: 10px;
+}
+
 .card {
     background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 20px;
     margin: 15px 0;
@@ -55,9 +60,6 @@ button:hover {
 .back { background: #64748b; }
 .buy { background: #f59e0b; }
 
-h1 {
-    margin-top: 20px;
-}
 </style>
 </head>
 
@@ -104,7 +106,11 @@ h1 {
 
 <script>
 const tg = window.Telegram.WebApp;
-tg.expand();
+
+// настройки Telegram
+tg.expand(); // на весь экран
+tg.BackButton.hide(); // убрать кнопку назад Telegram
+tg.setHeaderColor("#38bdf8"); // цвет верхней панели
 
 let selectedPlan = "";
 
@@ -113,7 +119,6 @@ function openTariff(name, price) {
     selectedPlan = name;
     document.getElementById("tariffName").innerText = name;
     document.getElementById("tariffPrice").innerText = price;
-
     showScreen("tariff");
 }
 
@@ -133,7 +138,7 @@ function showScreen(id) {
     document.getElementById(id).classList.add("active");
 }
 
-// покупка → отправка в бот
+// отправка в бот
 function buy() {
     tg.sendData(selectedPlan);
 }
