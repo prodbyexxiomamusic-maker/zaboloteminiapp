@@ -1,22 +1,91 @@
-<!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>ZaboloteVPN</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-</head>
-<body style="font-family: sans-serif; text-align: center; padding: 20px;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h2>🌐 ZaboloteVPN</h2>
+    <!-- Telegram WebApp -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .basic { background: #22c55e; }
+        .premium { background: #3b82f6; }
+        .vip { background: #a855f7; }
+
+        .btn {
+            background: #334155;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🌐 ZaboloteVPN</h1>
 <p>Выберите тариф:</p>
 
-<button onclick="buy('Базовый')">⚡ Базовый — 100₽</button><br><br>
-<button onclick="buy('Премиум')">⭐ Премиум — 249₽</button><br><br>
-<button onclick="buy('VIP')">💎 VIP — 799₽</button>
+<div class="card">
+    <h3>⚡ Базовый</h3>
+    <p>100₽ / месяц</p>
+    <button class="basic" onclick="buy('Базовый')">Выбрать</button>
+</div>
+
+<div class="card">
+    <h3>⭐ Премиум</h3>
+    <p>249₽ / 3 месяца</p>
+    <button class="premium" onclick="buy('Премиум')">Выбрать</button>
+</div>
+
+<div class="card">
+    <h3>💎 VIP</h3>
+    <p>799₽ / 12 месяцев</p>
+    <button class="vip" onclick="buy('VIP')">Выбрать</button>
+</div>
+
+<div class="card">
+    <h3>🎁 Реферальная система</h3>
+    <p>Получайте 10% с оплат друзей</p>
+    <button class="btn" onclick="ref()">Подробнее</button>
+</div>
 
 <script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
 function buy(plan) {
-    Telegram.WebApp.sendData(plan);
+    tg.sendData(plan);
+}
+
+function ref() {
+    alert("Приглашайте друзей и получайте 10%!\nВыплаты 1 числа каждого месяца.");
 }
 </script>
 
